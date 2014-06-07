@@ -19,3 +19,7 @@ code {font-family: Consolas, 'Liberation Mono', Courier, monospace;color: #534C4
     .selector {color: rgb(255, 130, 47);}
     .property {color: #1f8dd6;}
     .cssString {color: rgb(103, 246, 36);}
+/****  script  ****/
+    .scriptString {color: rgb(103, 246, 36)!important;}
+    .operation {color: red;}
+    .var, .function {color:#1f8dd6;}

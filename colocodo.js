@@ -56,6 +56,18 @@ function renderCss (codeStr) {
     return lineIntent(lines).join('<br />')
 }
 
+function renderScript (codeStr) {
+    var code = codeStr.replace(/"/g, '&quot;')
+                    .replace(/'/g, '&apos;')
+                    .replace(/([\+\-\*\/\^\~\!\%\|])/g, '<span class="operation">$1</span>')
+                    .replace(/(&quot;|&apos;)(.*)?(&quot;|&apos;)/g, '<span class="scriptString">$1$2$3</span>')
+                    .replace(/(\W)var(?![a-zA-Z0-9\_])/, '$1<span class="var">var</span>')
+                    .replace(/(\W)function(?![a-zA-Z0-9\_])/, '$1<span class="function">function</span>')
+
+    var lines = code.split(/\n/);
+    return lineIntent(lines).join('<br />')
+}
+
 var code = renderHTML(document.querySelector('#tpl-html').innerHTML);
 document.querySelector('#code').innerHTML = code;
 
@@ -64,4 +76,7 @@ document.querySelector('#bashCode').innerHTML = bashCode;
 
 var cssCode = renderCss(document.querySelector('#tpl-css').innerHTML);
 document.querySelector('#cssCode').innerHTML = cssCode;
+
+var scriptCode = renderScript(document.querySelector('#tpl-script').innerHTML);
+document.querySelector('#scriptCode').innerHTML = scriptCode;
 

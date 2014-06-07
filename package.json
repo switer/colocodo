@@ -1,0 +1,27 @@
+{
+  "name": "colocodo",
+  "version": "1.0.0",
+  "description": "Syntax highlight for bash, html, javascript,css.",
+  "main": "colocodo.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/switer/colocodo.git"
+  },
+  "keywords": [
+    "syntax",
+    "highlight",
+    "javascript",
+    "css",
+    "html",
+    "bash"
+  ],
+  "author": "switer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/switer/colocodo/issues"
+  },
+  "homepage": "https://github.com/switer/colocodo"
+}
