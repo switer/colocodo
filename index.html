@@ -3,66 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Colocodo</title>
-    <link rel="stylesheet" href="html.css">
+    <link rel="stylesheet" href="theme.css">
 </head>
 <body>
-    <script type="text/html" id="tpl-script">
+    <script type="text/colo" id="tpl-html">
         <!doctype html>
         <meta charset="UTF-8">
-
         <div>
             <span data-index="1">helloword</span>
         </div>
-        <img src="" alt="">
+        <img src="'ias'" alt="">
         <input type="text">
-
         <div>helloword</div>
     </script>
-    <code id="code">
-    </code>
-    <script>
-        function createScript (codeStr) {
-            var code = codeStr.replace(/</g, '&lt;')
-                            .replace(/>/g, '&gt;')
-                            .replace(/"/g, '&quot;')
-                            .replace(/(\s)([a-zA-Z\-]+?)\=&quot;/g, '$1<span class="attr">$2</span><span class="equal">=</span>&quot;')
-                            .replace(/=&quot;(.+?)&quot;/g, '=<span class="string">&quot;$1&quot;</span>')
-                            .replace(/&lt;([a-zA-Z\-]+?)(\s)/g, '&lt;<span class="tagname">$1</span>$2')
-                            .replace(/\/([a-zA-Z\-]+?)&gt;/g, '<span class="tagclose">/</span><span class="tagname">$1</span>&gt;')
-                            .replace(/&lt;/g, '<span class="tag">&lt;</span>')
-                            .replace(/&gt;/g, '<span class="tag">&gt;</span>')
-                            .replace(/\n/g, '<br />')
-
-            var lines = code.split('<br />'),
-                fmLines = [],
-                intentMinLength;
-
-            // get min intent
-            lines.forEach(function (line) {
-                if (!line.trim()) return;
-                var intents = line.match(/^\s*/)[0];
-                if (intentMinLength == undefined || intents.length < intentMinLength) {
-                    intentMinLength = intents.length;
-                }
-                fmLines.push(line);
-            });
-            // replace intent and replace space of &nbsp;
-            var regexp = new RegExp('^\\s{0,@}'.replace('@', intentMinLength), 'g');
-            fmLines.forEach(function (line, index) {
-                line = line.replace(regexp, '');
-                var intents = line.match(/^\s*/)[0];
-                intents = intents.replace(/\s/g, '&nbsp;');
-                fmLines[index] = line.replace(/^\s*/, intents)
-
-            });
-
-            return fmLines.join('<br />');
-        }
-        var code = createScript(document.querySelector('#tpl-script').innerHTML);
-        console.log(document.querySelector('#tpl-script').innerHTML);
-        // console.log(code);
-        document.querySelector('#code').innerHTML = code;
+    <script type="text/colo" id="tpl-bash">
+        cd ./
+        npm i
+        npm start
+    </script>
+    <script type="text/colo" id="tpl-css">
+        body {color: white;}
+        code {font-family: Consolas, 'Liberation Mono', Courier, monospace;color: #534C4C;
+    padding: 10px 30px;border-left: 3px solid #1f8dd6;background: rgb(245, 251, 253);
+    margin: auto;vertical-align: top;display: block;line-height: 40px;}
 
     </script>
+
+    <script type="text/colo" id="tpl-script">
+        var a, b, c,
+            d = 'helloword';
+        (function () {
+
+        })();
+    </script>
+
+    <code id="code"></code>
+    <code id="bashCode"></code>
+    <code id="cssCode"></code>
+    <code id="scriptCode"></code>
+    <script src="colocodo.js"></script>
 </body>
 </html>
