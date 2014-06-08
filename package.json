@@ -1,7 +1,7 @@
 {
   "name": "colocodo",
   "version": "1.0.0",
-  "description": "Syntax highlight for bash, html, javascript,css.",
+  "description": "Syntax highlight for command, html, javascript,css.",
   "main": "colocodo.js",
   "scripts": {
     "test": "node test"

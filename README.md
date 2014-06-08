@@ -1,4 +1,4 @@
 colocodo
 ========
 
-Syntax highlight for bash, html, javascript,css
+Syntax highlight for command, html, javascript,css
