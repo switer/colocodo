@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Colocodo</title>
-    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="colocodo.css">
 </head>
 <body>
     <script type="text/colo" id="tpl-html">
@@ -13,7 +13,13 @@
             <span data-index="1">helloword</span>
         </div>
         <img src="'ias'" alt="">
-        <input type="text">
+        <input 
+            type="text"
+        >
+        <!-- 
+            aa 
+        -->
+
         <div>helloword</div>
     </script>
     <script type="text/colo-command" id="tpl-command">
@@ -22,6 +28,7 @@
         npm start
     </script>
     <script type="text/colo" id="tpl-css">
+        /* --comm --*/
         body {color: white;}
         code {font-family: Consolas, 'Liberation Mono', Courier, monospace;color: #534C4C;
     padding: 10px 30px;border-left: 3px solid #1f8dd6;background: rgb(245, 251, 253);
@@ -30,9 +37,17 @@
     </script>
 
     <script type="text/colo" id="tpl-script">
+    /**
+     *  comment
+     **/
         var a, b, c,
             d = 'helloword',
+            slice = Array.prototype.slice,
+            toString = Object.prototype.toString, // TODO
             f = 2 - 1;
+        toString.call({});
+        slice.apply([]);
+        // a = function () {}
         (function () {
 
         })();

@@ -40,11 +40,13 @@
                         .replace(/"/g, '&quot;')
                         .replace(/'/g, '&apos;')
                         .replace(/(\s)([a-zA-Z\-]+)?\=/g, '$1<span class="attr">$2</span><span class="equal">=</span>')
+                        .replace(/&lt;!--([\s\S]*)?--&gt;/g, '<span class="comment">&lt;!--$1--&gt;</span>')
                         .replace(/\=&quot;(.+?)&quot;/g, '=<span class="string">&quot;$1&quot;</span>')
                         .replace(/&lt;([a-zA-Z\-]+)?(\s)/g, '&lt;<span class="tagname">$1</span>$2')
                         .replace(/\/([a-zA-Z\-]+)?&gt;/g, '<span class="tagclose">/</span><span class="tagname">$1</span>&gt;')
                         .replace(/&lt;/g, '<span class="tag">&lt;</span>')
                         .replace(/&gt;/g, '<span class="tag">&gt;</span>')
+
 
         return lineIntent(code);
     }
@@ -62,7 +64,8 @@
         var code = codeStr.replace(/"/g, '&quot;')
                         .replace(/'/g, '&apos;')
                         .replace(/(&quot;|&apos;)(.*)?(&quot;|&apos;)/g, '<span class="cssString">$1$2$3</span>')
-                        .replace(/(\n|\})(\s*)([^{}]+)(?=\{)/g, '$1$2<span class="selector">$3</span>')
+                        .replace(/\/\*([\s\S]*)?\*\//g, '<span class="cssComment">/*$1*/</span>')
+                        .replace(/(\n|\})(\s*)([^{}\/\*]+)(?=\{)/g, '$1$2<span class="selector">$3</span>')
                         .replace(/(\{|\;)(\s*)([a-zA-Z0-9\-]+)(?=\s*\:)/g, '$1$2<span class="property">$3</span>')
 
         return lineIntent(code);
@@ -70,13 +73,18 @@
     /**
      *  HTML syntax render
      **/
-    function renderScript (codeStr) {
+    function renderJs (codeStr) {
         var code = codeStr.replace(/"/g, '&quot;')
-                        .replace(/'/g, '&apos;')
-                        .replace(/([\+\-\*\/\^\~\!\%\|])/g, '<span class="operation">$1</span>')
-                        .replace(/(&quot;|&apos;)(.*)?(&quot;|&apos;)/g, '<span class="scriptString">$1$2$3</span>')
-                        .replace(/(\W)var(?![a-zA-Z0-9\_])/, '$1<span class="var">var</span>')
-                        .replace(/(\W)function(?![a-zA-Z0-9\_])/, '$1<span class="function">function</span>')
+                        .replace(/'/g, '&apos;')    
+                        .replace(/\/\*([\s\S]*)?\*\//g, '<span class="jsComment">/*$1*/</span>')
+                        .replace(/([\+\-\^\~\!\%\|])/g, '<span class="operation">$1</span>')
+                        .replace(/(&quot;|&apos;)(.*)?(&quot;|&apos;)/g, '<span class="jsString">$1$2$3</span>')
+                        .replace(/(\W|\b)(var|function|prototype|Array|String|Number|Boolean|Object|\.call|\.apply)(\W|\b)/g, '$1<span class="keyword">$2</span>$3')
+                        .replace(/([\[\]\{\}\(\)])/g, '<span class="bracket">$1</span>')
+                        .replace(/\/\/([^\r\n]*)/g, '<span class="jsComment">//$1</span>')
+                        // .replace(/(\W)(var|function)(?![a-zA-Z0-9\_])/, '$1<span class="keyword">$2</span>')
+                        // .replace(/(\W)function(?![a-zA-Z0-9\_])/, '$1<span class="function">function</span>')
+                        // .replace(/(\W)prototype(?![a-zA-Z0-9\_])/, '$1<span class="prototype">prototype</span>')
 
         return lineIntent(code);
     }
@@ -95,7 +103,7 @@
         if (codeStr.match(/^\s*\</) || codeStr.match(/\>\s*$/)) return 'html';
         else if (codeStr.replace(/^\s*?\/\*.*?\*\/\s*?/mg, '')
             .match(/^\s*?([a-zA-Z0-9\-\_\,\#\.\s]+)?(?=(\:[a-zA-Z\-]+|\s*)\{(.*)?\})/)) return 'css';
-        else return 'javascript';
+        else return 'js';
     }
 
     var Colo = {
@@ -109,7 +117,7 @@
             }
 
             switch (type) {
-                case 'javascript': return renderScript(codeStr);break;
+                case 'js': return renderJs(codeStr);break;
                 case 'css': return renderCss(codeStr);break;
                 case 'html': return renderHTML(codeStr);break;
                 case 'command': return renderCommand(codeStr);break;
