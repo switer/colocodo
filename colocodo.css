@@ -21,6 +21,8 @@ code {font-family: Consolas, 'Liberation Mono', Courier, monospace;color: #534C4
     .property {color: #1f8dd6;}
     .cssString {color: rgb(103, 246, 36);}
     .cssComment {color: #ccc;}
+    .number {color: blue;}
+    .unit {color: red;}
 
 /****  javascript  ****/
     .jsString {color: rgb(103, 246, 36);}

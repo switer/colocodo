@@ -67,6 +67,7 @@
                         .replace(/\/\*([\s\S]*)?\*\//g, '<span class="cssComment">/*$1*/</span>')
                         .replace(/(\n|\})(\s*)([^{}\/\*]+)(?=\{)/g, '$1$2<span class="selector">$3</span>')
                         .replace(/(\{|\;)(\s*)([a-zA-Z0-9\-]+)(?=\s*\:)/g, '$1$2<span class="property">$3</span>')
+                        .replace(/\b(\d+)?(px|em|\%)/g, '<span class="number">$1</span><span class="unit">$2</span>')
 
         return lineIntent(code);
     }
