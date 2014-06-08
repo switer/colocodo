@@ -39,11 +39,11 @@
                         .replace(/>/g, '&gt;')
                         .replace(/"/g, '&quot;')
                         .replace(/'/g, '&apos;')
-                        .replace(/(\s)([a-zA-Z\-]+)?\=/g, '$1<span class="attr">$2</span><span class="equal">=</span>')
-                        .replace(/&lt;!--([\s\S]*)?--&gt;/g, '<span class="comment">&lt;!--$1--&gt;</span>')
+                        .replace(/(\s)([a-zA-Z\-]+?)\=/g, '$1<span class="attr">$2</span><span class="equal">=</span>')
+                        .replace(/&lt;!--([\s\S]*?)--&gt;/g, '<span class="comment">&lt;!--$1--&gt;</span>')
                         .replace(/\=&quot;(.+?)&quot;/g, '=<span class="string">&quot;$1&quot;</span>')
-                        .replace(/&lt;([a-zA-Z\-]+)?(\s)/g, '&lt;<span class="tagname">$1</span>$2')
-                        .replace(/\/([a-zA-Z\-]+)?&gt;/g, '<span class="tagclose">/</span><span class="tagname">$1</span>&gt;')
+                        .replace(/&lt;([a-zA-Z\-]+?)(\s)/g, '&lt;<span class="tagname">$1</span>$2')
+                        .replace(/\/([a-zA-Z\-]+?)&gt;/g, '<span class="tagclose">/</span><span class="tagname">$1</span>&gt;')
                         .replace(/&lt;/g, '<span class="tag">&lt;</span>')
                         .replace(/&gt;/g, '<span class="tag">&gt;</span>')
 
@@ -54,20 +54,23 @@
      *  command syntax render
      **/
     function renderCommand (codeStr) {
-        var code = codeStr.replace(/\n(\s*)([a-zA-Z\-]+)/g, '\n$1<span class="sh">$2</span>');
+        var code = codeStr.replace(/\n(\s*)([a-zA-Z\-]+)(?=\s|$)/g, '\n$1<span class="sh">$2</span>')
+                        .replace(/##([^\r\n]*)/g, '<span class="cmdComment">##$1</span>')
         return lineIntent(code);
     }
     /**
      *  HTML syntax render
      **/
     function renderCss (codeStr) {
-        var code = codeStr.replace(/"/g, '&quot;')
+        var code = codeStr.replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
                         .replace(/'/g, '&apos;')
-                        .replace(/(&quot;|&apos;)(.*)?(&quot;|&apos;)/g, '<span class="cssString">$1$2$3</span>')
-                        .replace(/\/\*([\s\S]*)?\*\//g, '<span class="cssComment">/*$1*/</span>')
+                        .replace(/(&quot;|&apos;)(.*?)(&quot;|&apos;)/g, '<span class="cssString">$1$2$3</span>')
+                        .replace(/\/\*([\s\S]*?)\*\//g, '<span class="cssComment">/*$1*/</span>')
                         .replace(/(\n|\})(\s*)([^{}\/\*]+)(?=\{)/g, '$1$2<span class="selector">$3</span>')
                         .replace(/(\{|\;)(\s*)([a-zA-Z0-9\-]+)(?=\s*\:)/g, '$1$2<span class="property">$3</span>')
-                        .replace(/\b(\d+)?(px|em|\%)/g, '<span class="number">$1</span><span class="unit">$2</span>')
+                        .replace(/\b(\d+?)(px|em|\%)/g, '<span class="number">$1</span><span class="unit">$2</span>')
 
         return lineIntent(code);
     }
@@ -75,18 +78,25 @@
      *  HTML syntax render
      **/
     function renderJs (codeStr) {
-        var code = codeStr.replace(/"/g, '&quot;')
+        var code = codeStr.replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
                         .replace(/'/g, '&apos;')    
-                        .replace(/\/\*([\s\S]*)?\*\//g, '<span class="jsComment">/*$1*/</span>')
+                        .replace(/\/\*([\s\S]*?)\*\//g, '<span class="jsComment">/*$1*/</span>')
                         .replace(/([\+\-\^\~\!\%\|])/g, '<span class="operation">$1</span>')
-                        .replace(/(&quot;|&apos;)(.*)?(&quot;|&apos;)/g, '<span class="jsString">$1$2$3</span>')
-                        .replace(/(\W|\b)(var|function|prototype|Array|String|Number|Boolean|Object|\.call|\.apply)(\W|\b)/g, '$1<span class="keyword">$2</span>$3')
+                        .replace(/&quot;(.*?)&quot;/g, '<span class="jsString">&quot;$1&quot;</span>')
+                        .replace(/&apos;(.*?)&apos;/g, '<span class="jsString">&apos;$1&apos;</span>')
+                        .replace(
+                            /(\b|\W|\s)(var|function|prototype|Array|String|Number|Boolean|Object|undefined|window|document|null|NaN)(\W|\b|\s)/gm, 
+                            '$1<span class="keyword">$2</span>$3'
+                        )
+                        .replace(
+                            /\.(log|call|apply|childNodes|appendChild|removeChild|body)(?=\b|\.)/g, 
+                            '.<span class="keyword">$1</span>'
+                        )
                         .replace(/([\[\]\{\}\(\)])/g, '<span class="bracket">$1</span>')
                         .replace(/\/\/([^\r\n]*)/g, '<span class="jsComment">//$1</span>')
-                        // .replace(/(\W)(var|function)(?![a-zA-Z0-9\_])/, '$1<span class="keyword">$2</span>')
-                        // .replace(/(\W)function(?![a-zA-Z0-9\_])/, '$1<span class="function">function</span>')
-                        // .replace(/(\W)prototype(?![a-zA-Z0-9\_])/, '$1<span class="prototype">prototype</span>')
-
+ 
         return lineIntent(code);
     }
     function renderDefault (codeStr) {
@@ -103,7 +113,7 @@
     function syntaxDetect (codeStr) {
         if (codeStr.match(/^\s*\</) || codeStr.match(/\>\s*$/)) return 'html';
         else if (codeStr.replace(/^\s*?\/\*.*?\*\/\s*?/mg, '')
-            .match(/^\s*?([a-zA-Z0-9\-\_\,\#\.\s]+)?(?=(\:[a-zA-Z\-]+|\s*)\{(.*)?\})/)) return 'css';
+            .match(/^\s*?([a-zA-Z0-9\-\_\,\#\.\s]+?)(?=(\:[a-zA-Z\-]+|\s*)\{(.*?)\})/)) return 'css';
         else return 'js';
     }
 
@@ -135,12 +145,16 @@
             var type = element.getAttribute('type'),
                 $parent = element.parentNode,
                 $code = document.createElement('code'),
-                args = [];
+                args = [],
+                attributes = Array.prototype.slice.call(element.attributes || []);
 
             type = type.replace(/text\/colo[\-]*/, '');
             if (type) {
                 args.push(type);
             }
+            attributes.forEach(function (attr) {
+                $code.setAttribute(attr.nodeName, attr.nodeValue);
+            });
             args.push(element.innerHTML);
             $code.innerHTML = Colo.render.apply(Colo, args);
             $parent.replaceChild($code, element);

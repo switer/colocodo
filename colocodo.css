@@ -15,6 +15,9 @@ code {font-family: Consolas, 'Liberation Mono', Courier, monospace;color: #534C4
 
 /****  bash  ****/
     .sh {color: #1f8dd6}
+    .cmdComment {color: #ccc;}
+        .cmdComment span {color: #ccc;}
+
 
 /****  css  ****/
     .selector {color: rgb(255, 130, 47);}
@@ -29,5 +32,5 @@ code {font-family: Consolas, 'Liberation Mono', Courier, monospace;color: #534C4
         .jsString span {color: rgb(103, 246, 36);}
     .operation {color: red;}
     .var, .function, .keyword{color:#1f8dd6;}
-    .jsComment {color: #ccc;}
-        .jsComment span {color: #ccc;}
+    .jsComment {color: #ccc!important;}
+        .jsComment span {color: #ccc!important;}
