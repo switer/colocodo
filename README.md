@@ -1,7 +1,7 @@
 colocodo
 ========
 
-Syntax highlight for command, html, javascript,css
+Syntax highlight for command, html, javascript,css. [Example](http://jsinspector.herokuapp.com/)
 
 ## Usage
 ```html
